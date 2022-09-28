@@ -47,12 +47,12 @@ const createBook = async (req, res) => {
         // subcategory Validation
         if (!validation.isValid(subcategory)) return res.status(400).send({ status: false, message: "SubCategory is required." });
 
-        //if (!validation.isValid(bookCover)) return res.status(400).send({ status: false, message: "bookCover is required" })
+        if (!validation.isValid(bookCover)) return res.status(400).send({ status: false, message: "bookCover is required" })
 
         let files = req.files
         if (files && files.length > 0) {
 
-            let uploadedFileURL = await uploadFile(files[0])
+            let uploadedFileURL = await aws.uploadFile(files[0])
             const uniqueCover = await bookModel.findOne({ bookCover: uploadedFileURL });
             if (uniqueCover) { return res.status(400).send({ status: false, message: "book cover already exists" }) }
 
@@ -61,21 +61,6 @@ const createBook = async (req, res) => {
         else {
             res.status(400).send({ msg: "No file found" })
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         // releasedAt
         if (!validation.isValid(releasedAt)) return res.status(400).send({ status: false, message: "ReleasedAt is required." });
