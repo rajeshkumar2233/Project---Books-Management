@@ -9,7 +9,7 @@ const aws = require('../AWS/aws.js')
 const createBook = async (req, res) => {
     try {
         const data = req.body
-        let { title, excerpt, userId, ISBN, category, subcategory, releasedAt, bookCover, isDeleted } = data
+        let { title, excerpt, userId, ISBN, category, subcategory, releasedAt,  isDeleted } = data
         // If empty request body
         if (!validation.isValidRequest(data)) return res.status(400).send({ status: false, message: "Please enter User data" });
 
@@ -69,7 +69,7 @@ const createBook = async (req, res) => {
         // Can't Set deleted true at creation time
         if (isDeleted == true) return res.status(400).send({ status: false, message: "You can't add this key at book creation time." })
 
-        let savedData = await bookModel.create(req.body)
+        let savedData = await bookModel.create(data)
         return res.status(201).send({ status: true, data: savedData })
     }
     catch (error) {
